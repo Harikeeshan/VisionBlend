@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VisionBlend</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+    body {
+      background: linear-gradient(45deg, #ff0066, #6600ff, #00ccff, #00ff99);
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+    }
+    .app-container {
+      background: #0f0f3f;
+      border-radius: 30px;
+      padding: 20px;
+      width: 320px;
+      box-shadow: 0 0 20px #000;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .mode-buttons button {
+      width: 48%;
+      margin: 1%;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+    }
+    .mode-buttons button:nth-child(1) { background-color: #e60000; }
+    .mode-buttons button:nth-child(2) { background-color: #00cc44; }
+    .mode-buttons button:nth-child(3) { background-color: #3399ff; }
+    .mode-buttons button:nth-child(4) { background-color: #4b4bff; }
+
+    .slider-group {
+      margin: 20px 0;
+    }
+    .slider-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .slider {
+      width: 100%;
+    }
+    .prescription {
+      margin: 20px 0;
+    }
+    .prescription label {
+      display: block;
+      margin-bottom: 5px;
+      color: #aaff00;
+    }
+    .prescription-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .prescription-row span {
+      font-size: 1rem;
+    }
+    .prescription-row button {
+      background-color: #ff9933;
+      color: black;
+      font-weight: bold;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+    }
+    .bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+      padding-top: 10px;
+      border-top: 2px solid #444;
+    }
+    .bottom-nav button {
+      background: none;
+      border: none;
+      color: white;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    .bottom-nav i {
+      display: block;
+      font-size: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <h1>VisionBlend</h1>
+    <div class="mode-buttons">
+      <button onclick="applyMode('protanopia')">Protanopia</button>
+      <button onclick="applyMode('deuteranopia')">Deuteranopia</button>
+      <button onclick="applyMode('tritanopia')">Tritanopia</button>
+      <button onclick="applyMode('full')">Full Mode</button>
+    </div>
+    <div class="slider-group">
+      <label for="brightness">Adjust Brightness</label>
+      <input type="range" id="brightness" class="slider" min="0" max="100" value="50" onchange="adjustBrightness(this.value)">
+    </div>
+    <div class="slider-group">
+      <label for="contrast">Adjust Contrast</label>
+      <input type="range" id="contrast" class="slider" min="0" max="100" value="50" onchange="adjustContrast(this.value)">
+    </div>
+    <div class="prescription">
+      <label>Prescription Assist</label>
+      <div class="prescription-row">
+        <span>Near</span>
+        <button onclick="adjust('near', -0.25)">-</button>
+        <span id="near-val">-2.0 D</span>
+        <button onclick="adjust('near', 0.25)">+</button>
+      </div>
+      <div class="prescription-row">
+        <span>Far</span>
+        <button onclick="adjust('far', -0.25)">-</button>
+        <span id="far-val">-1.0 D</span>
+        <button onclick="adjust('far', 0.25)">+</button>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <button><i class="material-icons">home</i>Home</button>
+      <button><i class="material-icons">person</i>Profiles</button>
+      <button><i class="material-icons">visibility</i>Vision Test</button>
+      <button><i class="material-icons">settings</i>Settings</button>
+    </div>
+  </div>
+
+  <script>
+    let near = -2.0;
+    let far = -1.0;
+
+    function adjust(type, change) {
+      if (type === 'near') {
+        near = parseFloat((near + change).toFixed(2));
+        document.getElementById('near-val').textContent = `${near} D`;
+      } else {
+        far = parseFloat((far + change).toFixed(2));
+        document.getElementById('far-val').textContent = `${far} D`;
+      }
+    }
+
+    function adjustBrightness(value) {
+      document.querySelector('.app-container').style.filter = `brightness(${value}%)`;
+    }
+
+    function adjustContrast(value) {
+      document.querySelector('.app-container').style.filter += ` contrast(${value}%)`;
+    }
+
+    function applyMode(mode) {
+      switch (mode) {
+        case 'protanopia':
+          document.body.style.filter = 'url(#protanopia)';
+          break;
+        case 'deuteranopia':
+          document.body.style.filter = 'url(#deuteranopia)';
+          break;
+        case 'tritanopia':
+          document.body.style.filter = 'url(#tritanopia)';
+          break;
+        case 'full':
+          document.body.style.filter = 'none';
+          break;
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</body>
+</html>
